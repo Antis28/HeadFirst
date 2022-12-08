@@ -20,6 +20,10 @@ namespace _2_MatchGame
     /// </summary>
     public partial class MainWindow : Window
     {
+        TextBlock lastTextBlockClicked;
+        bool findingMatch = false;
+
+
         public MainWindow()
         {
             InitializeComponent();
@@ -30,19 +34,11 @@ namespace _2_MatchGame
         {
             List<String> animalEmoji = new List<string>()
             {
-               "🐙", "🐙",
-               "🐱", "🐱",
-               "🐵", "🐵",
-               "🐼", "🐼",
-               "🐘", "🐘",
-               "🐆", "🐆",
-               "🦌", "🦌",
-               "🐂", "🐂",
-               "🐮", "🐮",
-               "🐇", "🐇",
+               "🐙", "🐙",               
+               "🐰", "🐰",
                "🦇", "🦇",
                "🐔", "🐔",
-               "🐿", "🐿",
+               "🐴", "🐴",
                "🐧", "🐧",               
                "🐸", "🐸",
                "🐳", "🐳",
@@ -56,6 +52,32 @@ namespace _2_MatchGame
                 textBlock.Text = newtEmoji;
                 animalEmoji.RemoveAt(index);
 
+            }
+        }
+
+        private void textBlock_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            TextBlock textBlock = sender as TextBlock;            
+            if (findingMatch == false)
+            {
+                // Не выбрано не одной карточки животного;
+                // сохраняем новый выбор игрока и скрываем карточку;
+                // ставим флаг о том что выбран первый элемент в паре карточек.
+                textBlock.Visibility = Visibility.Hidden;
+                lastTextBlockClicked = textBlock;
+                findingMatch = true;
+            }
+            else if (textBlock.Text == lastTextBlockClicked.Text)
+            {
+                // Карточки совпали, скрываем вторую карточку и сбрасываем флаг.
+                textBlock.Visibility = Visibility.Hidden;
+                findingMatch = false;
+            }
+            else
+            {
+                // Карточки не совпали, возращаем видимость первой карточки, сбрасываем флаг.
+                lastTextBlockClicked.Visibility = Visibility.Visible;
+                findingMatch = false;
             }
         }
     }
